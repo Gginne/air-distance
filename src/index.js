@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 import './index.css';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet/dist/leaflet.js';
 
 import App from './App';
 

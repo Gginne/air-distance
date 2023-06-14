@@ -1,6 +1,6 @@
 import {useState} from "react"; 
 
-export default function Calculator() {
+export default function Calculator({onCalculate}) {
   const [pointA, setPointA] = useState('')
   const [pointB, setPointB] = useState('')
   const [distance, setDistance] = useState('N/A')
@@ -9,9 +9,16 @@ export default function Calculator() {
     return degrees * (Math.PI / 180);
   }
 
+
   const handleCalculatation = () => {
+    if(pointA === '' || pointB === '') return alert('Please enter both points')
+
     const [pointA_lat, pointA_lng] = pointA.split(',')
     const [pointB_lat, pointB_lng] = pointB.split(',')
+
+    if(isNaN(pointA_lat) || isNaN(pointA_lng) || isNaN(pointB_lat) || isNaN(pointB_lng)) return alert('Please enter valid points')
+
+    onCalculate([[pointA_lat, pointA_lng], [pointB_lat, pointB_lng]])
 
     const R = 6371; // Earth's radius in kilometers
   
