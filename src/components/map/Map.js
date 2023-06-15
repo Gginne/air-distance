@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from "react-leaflet";
 
-import { useMemo, useRef, useEffect } from "react";
+import {useRef, useEffect } from "react";
 
 import L from "leaflet";
 
@@ -39,7 +39,7 @@ export default function Map({ markers }) {
         {markers.map((point, index) => (
           <Marker key={index} position={point}>
             <Popup>
-              Point {index == 0 ? "A" : "B"} <br /> {point}
+              Point {index === 0 ? "A" : "B"} <br /> {point}
             </Popup>
           </Marker>
         ))}

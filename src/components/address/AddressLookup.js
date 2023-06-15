@@ -1,7 +1,5 @@
 import { useMemo, useState } from "react";
 import useAddressLookup from "../../hooks/useAddressLookup";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 
 export default function AddressLookup({ onSelectPointA, onSelectPointB }) {
   const [address, setAddress] = useState("");
