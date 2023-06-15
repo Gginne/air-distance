@@ -1,4 +1,5 @@
 import {useState} from "react"; 
+import AddressLookup from "../address/AddressLookup";
 
 export default function Calculator({onCalculate}) {
   const [pointA, setPointA] = useState('')
@@ -42,7 +43,7 @@ export default function Calculator({onCalculate}) {
   
    
   return (
-    <div className="absolute z-50 top-2 left-3 ">
+    <div className="absolute z-50 top-2 left-3 max-w-lg">
 
       <div className="flex flex-col shadow-md mb-3 p-3 bg-base-500 border-none text-white rounded-lg">
         <h2 className="text-2xl mb-3">
@@ -73,9 +74,7 @@ export default function Calculator({onCalculate}) {
       </div>
 
       <div className="flex flex-col shadow-md mb-3 p-3 bg-base-500 border-none text-white rounded">
-        <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-3 rounded">
-          Search
-        </button>
+        <AddressLookup onSelectPointA={(coord) => setPointA(coord)} onSelectPointB={(coord) => setPointB(coord)}/>
       </div>
     </div>
   );
