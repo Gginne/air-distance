@@ -4,14 +4,14 @@ import Calculator from "./components/calculator/Calculator";
 
 export default function App() {
 
-  const [points, setPoints] = useState([])
+  const [markers, setMarkers] = useState([])
 
   return (
     <div className="h-screen">
       <div className="relative h-full">
-        <Calculator onCalculate={(pts) => setPoints(pts)}/>
+        <Calculator onCalculate={(markers) => setMarkers(markers)}/>
 
-        <Map markers={points}/>
+        <Map markers={markers}/>
       </div>
     </div>
   );

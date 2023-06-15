@@ -18,7 +18,7 @@ export default function Map({ markers }) {
   useEffect(() => {
     if (markers.length > 0) {
       const leafletMap = mapRef.current;
-      const bounds = L.latLngBounds(markers.map((marker) => marker));
+      const bounds = L.latLngBounds(markers.map((marker) => marker.point));
       leafletMap.fitBounds(bounds);
     }
   }, [markers]);
@@ -36,17 +36,17 @@ export default function Map({ markers }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {markers.map((point, index) => (
+        {markers.map(({name, point}, index) => (
           <Marker key={index} position={point}>
             <Popup>
-              Point {index === 0 ? "A" : "B"} <br /> {point}
+              {name} <br /> lat: {point[0]}, lng: {point[1]}
             </Popup>
           </Marker>
         ))}
 
         {markers.length === 2 && (
           <>
-            <Polyline positions={markers} color="blue" />
+            <Polyline positions={markers.map(marker => marker.point)} color="blue" />
             <Tooltip
               permanent
               className="polyline-tooltip"
