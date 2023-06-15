@@ -1,12 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Map from "./components/map/Map";
 import Calculator from "./components/calculator/Calculator";
 
 export default function App() {
 
   const [points, setPoints] = useState([])
-  const [distance, setDistance] = useState(null)
-
 
   return (
     <div className="h-screen">
