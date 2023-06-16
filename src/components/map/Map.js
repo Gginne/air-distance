@@ -1,32 +1,53 @@
-import {
-  MapContainer,
-  TileLayer,
-  ZoomControl,
-  Marker,
-  Popup,
-  Polyline,
-  Tooltip,
-} from "react-leaflet";
+import { MapContainer,TileLayer,ZoomControl,Marker,Popup,Polyline,Tooltip,useMapEvents} from "react-leaflet";
 
-import {useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import L from "leaflet";
 
-export default function Map({ markers }) {
+function LocationMarker({ setPointA, setPointB }) {
+  const [position, setPosition] = useState(null);
+  const markerRef = useRef();
+
+  const map = useMapEvents({
+    click(e) {
+      setPosition(e.latlng);
+      console.log(e.latlng)
+      map.flyTo(e.latlng, map.getZoom());
+      if (markerRef.current) markerRef.current.openPopup();
+    },
+  });
+  
+
+  return position === null ? null : (
+    <Marker ref={markerRef} position={position}>
+      <Popup>
+        <b>lat:</b> {position.lat}<br/>
+        <b>lng:</b> {position.lng}
+        <div className="d-flex mt-2">
+          <button className="text-white mx-1 bg-orange-500 hover:bg-orange-700 text-xs py-1 px-2 rounded-xl"
+            onClick={() => setPointA(position.lat + "," + position.lng)}>
+            Set as Point A
+          </button>
+          <button className="text-white mx-1 bg-orange-500 hover:bg-orange-700 text-xs py-1 px-2 rounded-xl"
+            onClick={() => setPointB(position.lat + "," + position.lng)}>
+            Set as Point B
+          </button>
+        </div>
+      </Popup>
+    </Marker>
+  );
+}
+
+export default function Map({ markers, setPointA, setPointB }) {
   const mapRef = useRef();
 
   useEffect(() => {
     if (markers.length > 0) {
       const leafletMap = mapRef.current;
-      const bounds = L.latLngBounds(markers.map((marker) => marker.point));
+      const bounds = L.latLngBounds(markers.map((marker) => marker.position));
       leafletMap.fitBounds(bounds);
     }
   }, [markers]);
-
-  /*const textPosition = [
-    (point[0][0] + point[1][0]) / 2,
-    (point[0][1] + point[1][1]) / 2,
-  ];*/
 
   return (
     <div className="map__container">
@@ -36,17 +57,32 @@ export default function Map({ markers }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {markers.map(({name, point}, index) => (
-          <Marker key={index} position={point}>
+        {markers.map(({ name, position }, index) => (
+          <Marker key={index} position={position}>
             <Popup>
-              {name} <br /> lat: {point[0]}, lng: {point[1]}
+              <b>{name}</b> <br /> 
+              <b>lat:</b> {position[0]}<br/>
+              <b>lng:</b> {position[1]}
+              <div className="d-flex mt-2">
+                <button className="text-white mx-1 bg-orange-500 hover:bg-orange-700 text-xs py-1 px-2 rounded-xl"
+                  onClick={() => setPointA(position[0] + "," + position[1])}>
+                  Set as Point A
+                </button>
+                <button className="text-white mx-1 bg-orange-500 hover:bg-orange-700 text-xs py-1 px-2 rounded-xl"
+                  onClick={() => setPointB(position[0] + "," + position[1])}>
+                  Set as Point B
+                </button>
+              </div>
             </Popup>
           </Marker>
         ))}
 
         {markers.length === 2 && (
           <>
-            <Polyline positions={markers.map(marker => marker.point)} color="blue" />
+            <Polyline
+              positions={markers.map((marker) => marker.position)}
+              color="blue"
+            />
             <Tooltip
               permanent
               className="polyline-tooltip"
@@ -57,6 +93,8 @@ export default function Map({ markers }) {
             </Tooltip>
           </>
         )}
+
+        <LocationMarker setPointA={setPointA} setPointB={setPointB}/>
 
         <ZoomControl position="topright" />
       </MapContainer>

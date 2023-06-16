@@ -1,9 +1,8 @@
 import {useState} from "react"; 
 import AddressLookup from "../address/AddressLookup";
 
-export default function Calculator({onCalculate}) {
-  const [pointA, setPointA] = useState('')
-  const [pointB, setPointB] = useState('')
+export default function Calculator({onCalculate, pointA, pointB, setPointA, setPointB}) {
+
   const [distance, setDistance] = useState('N/A')
 
   const toRadians = (degrees) => {
@@ -19,7 +18,7 @@ export default function Calculator({onCalculate}) {
 
     if(isNaN(pointA_lat) || isNaN(pointA_lng) || isNaN(pointB_lat) || isNaN(pointB_lng)) return alert('Please enter valid points')
 
-    onCalculate([{name: 'Point A', point: [pointA_lat, pointA_lng]}, {name: 'Point B', point: [pointB_lat, pointB_lng]}])
+    onCalculate([{name: 'Point A', position: [pointA_lat, pointA_lng]}, {name: 'Point B', position: [pointB_lat, pointB_lng]}])
 
     const R = 6371; // Earth's radius in kilometers
   
