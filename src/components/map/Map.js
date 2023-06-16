@@ -5,22 +5,27 @@ import { useState, useRef, useEffect } from "react";
 import L from "leaflet";
 
 function LocationMarker({ setPointA, setPointB }) {
-  const [position, setPosition] = useState(null);
+  const [position, setPosition] = useState({lat: 0, lng: 0});
   const markerRef = useRef();
+
+  useEffect(() => {
+    if (markerRef.current) {
+      markerRef.current.openPopup();
+    }
+  }, [position]);
 
   const map = useMapEvents({
     click(e) {
       setPosition(e.latlng);
-      console.log(e.latlng)
       map.flyTo(e.latlng, map.getZoom());
-      if (markerRef.current) markerRef.current.openPopup();
     },
   });
+
   
 
   return position === null ? null : (
     <Marker ref={markerRef} position={position}>
-      <Popup>
+      <Popup isOpen={true}>
         <b>lat:</b> {position.lat}<br/>
         <b>lng:</b> {position.lng}
         <div className="d-flex mt-2">
@@ -87,6 +92,7 @@ export default function Map({ markers, setPointA, setPointB }) {
               permanent
               className="polyline-tooltip"
               direction="center"
+              opacity={1}
               offset={[0, -10]}
             >
               distance
